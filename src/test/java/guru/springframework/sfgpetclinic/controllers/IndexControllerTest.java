@@ -27,9 +27,8 @@ class IndexControllerTest {
     @Test
     @DisplayName("test exception")
     void oupsHandler() {
-        assertTrue("notimplemented".equals(controller.oupsHandler()), () -> "this is some" +
-                "expensive message to build" +
-                "for my test"
-        );
+        assertThrows(ValueNotFoundException.class, () -> {
+            controller.oupsHandler();
+        });
     }
 }

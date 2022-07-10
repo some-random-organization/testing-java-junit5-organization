@@ -5,10 +5,9 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.CsvFileSource;
-import org.junit.jupiter.params.provider.CsvSource;
-import org.junit.jupiter.params.provider.EnumSource;
-import org.junit.jupiter.params.provider.ValueSource;
+import org.junit.jupiter.params.provider.*;
+
+import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -62,4 +61,18 @@ class OwnerTest implements ModelTests {
         System.out.println(stateName + " " + val1 + " " + val2);
     }
 
+    @DisplayName("method provider test - ")
+    @ParameterizedTest(name = "{displayName} [{index}] {argumentsWithNames}")
+    @MethodSource("getArgs")
+    void fromMethodTest(String stateName, int val1, int val2){
+        System.out.println(stateName + " " + val1 + " " + val2);
+    }
+
+    static Stream<Arguments> getArgs(){
+        System.out.println("getArgs");
+        return Stream.of(
+                Arguments.of("FL", 7, 7),
+                Arguments.of("OH", 8, 8),
+                Arguments.of("MI", 9, 9));
+    }
 }

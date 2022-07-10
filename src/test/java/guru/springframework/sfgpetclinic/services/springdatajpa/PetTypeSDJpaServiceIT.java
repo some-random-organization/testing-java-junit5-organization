@@ -12,6 +12,7 @@ class PetTypeSDJpaServiceIT {
 
     @BeforeEach
     void setUp() {
+        System.out.println("*******************************************");
     }
 
     @Test

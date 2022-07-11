@@ -92,6 +92,10 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
                 <version>${maven-testing.version}</version>
+                <configuration>
+<!--                    <groups>model , controllers</groups>-->
+<!--                    <excludedGroups>controllers</excludedGroups>-->
+                </configuration>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>

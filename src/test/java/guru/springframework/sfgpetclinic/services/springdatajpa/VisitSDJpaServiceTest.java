@@ -13,6 +13,7 @@ import java.util.Optional;
 import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -50,23 +51,22 @@ class VisitSDJpaServiceTest {
     @Test
     void save() {
         Visit visit = new Visit();
-        when(visitRepository.save(visit)).thenReturn(visit);
+        when(visitRepository.save(any(Visit.class))).thenReturn(visit);
         Visit savedVisit = service.save(visit);
         assertNotNull(savedVisit);
         assertEquals(visit, savedVisit);
-        verify(visitRepository).save(visit);
+        verify(visitRepository).save(any(Visit.class));
     }
 
     @Test
     void delete() {
-        Visit visit = new Visit();
-        service.delete(visit);
-        verify(visitRepository).delete(visit);
+        service.delete(new Visit());
+        verify(visitRepository).delete(any(Visit.class));
     }
 
     @Test
     void deleteById() {
-        service.deleteById(anyLong());
+        service.deleteById(1L);
         verify(visitRepository).deleteById(anyLong());
     }
 }

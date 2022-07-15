@@ -15,8 +15,9 @@ import java.util.Set;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.BDDMockito.given;
+import static org.mockito.BDDMockito.then;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class VisitSDJpaServiceTest {
@@ -30,22 +31,25 @@ class VisitSDJpaServiceTest {
     @Test
     void findAll() {
         Set<Visit> visits = new HashSet<>(Set.of(new Visit(), new Visit()));
-        when(visitRepository.findAll()).thenReturn(visits);
+        given(visitRepository.findAll()).willReturn(visits);
         Set<Visit> foundVisits = service.findAll();
         assertNotNull(foundVisits);
         assertEquals(visits.size(), foundVisits.size());
         assertEquals(visits, foundVisits);
-        verify(visitRepository).findAll();
+        then(visitRepository).should().findAll();
+        then(visitRepository).shouldHaveNoMoreInteractions();
     }
 
     @Test
     void findById() {
         Visit visit = new Visit();
-        when(visitRepository.findById(1L)).thenReturn(Optional.of(visit));
+        given(visitRepository.findById(1L)).willReturn(Optional.of(visit));
         Visit foundVisit = service.findById(1L);
         assertNotNull(foundVisit);
         assertEquals(visit, foundVisit);
-        verify(visitRepository).findById(1L);
+        then(visitRepository).should().findById(1L);
+        then(visitRepository).should(never()).findById(5L);
+        then(visitRepository).shouldHaveNoMoreInteractions();
     }
 
     @Test

@@ -22,7 +22,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
-import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class OwnerController2Test implements ControllerTests {
@@ -79,6 +79,7 @@ class OwnerController2Test implements ControllerTests {
 
         assertThat("%Doe%").isEqualToIgnoringCase(stringArgumentCaptor.getValue());
         assertThat("redirect:/owners/1").isEqualToIgnoringCase(viewName);
+        verifyNoInteractions(model);
     }
 
     @Test
@@ -92,6 +93,7 @@ class OwnerController2Test implements ControllerTests {
 
         assertThat("%nie ma%").isEqualToIgnoringCase(stringArgumentCaptor.getValue());
         assertThat("owners/findOwners").isEqualToIgnoringCase(viewName);
+        verifyNoInteractions(model);
     }
 
     @Test
@@ -108,7 +110,8 @@ class OwnerController2Test implements ControllerTests {
         assertThat("owners/ownersList").isEqualToIgnoringCase(viewName);
 
         inOrder.verify(ownerService).findAllByLastNameLike(anyString());
-        inOrder.verify(model).addAttribute(anyString(), anyList());
+        inOrder.verify(model, times(1)).addAttribute(anyString(), anyList());
+        verifyNoMoreInteractions(model);
     }
 
 

@@ -7,18 +7,22 @@ import guru.springframework.sfgpetclinic.services.OwnerService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.ArgumentCaptor;
+import org.mockito.Captor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+
+import java.util.ArrayList;
+import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class OwnerControllerTest implements ControllerTests {
@@ -31,6 +35,35 @@ class OwnerControllerTest implements ControllerTests {
 
     @InjectMocks
     OwnerController controller;
+
+    @Captor
+    ArgumentCaptor<String> stringArgumentCaptor;
+
+    @Test
+    void processFindFormWildcardsString() {
+        Owner owner = new Owner(5L, "Joe", "Doe");
+        List<Owner> ownerList = new ArrayList<>();
+        final ArgumentCaptor<String> captor = ArgumentCaptor.forClass(String.class);
+        given(ownerService.findAllByLastNameLike(captor.capture())).willReturn(ownerList);
+
+        String viewName = controller.processFindForm(owner, result, null);
+
+        verify(ownerService).findAllByLastNameLike(captor.getValue());
+
+        assertThat("%Doe%").isEqualToIgnoringCase(captor.getValue());
+    }
+
+    @Test
+    void processFindFormWildcardsStringAnnotation() {
+        Owner owner = new Owner(5L, "Joe", "Doe");
+        List<Owner> ownerList = new ArrayList<>();
+
+        given(ownerService.findAllByLastNameLike(stringArgumentCaptor.capture())).willReturn(ownerList);
+
+        String viewName = controller.processFindForm(owner, result, null);
+
+        assertThat("%Doe%").isEqualToIgnoringCase(stringArgumentCaptor.getValue());
+    }
 
     @DisplayName("binding result has no errors")
     @Test

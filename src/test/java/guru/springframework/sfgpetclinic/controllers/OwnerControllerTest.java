@@ -5,6 +5,7 @@ import guru.springframework.sfgpetclinic.fauxspring.BindingResult;
 import guru.springframework.sfgpetclinic.fauxspring.Model;
 import guru.springframework.sfgpetclinic.model.Owner;
 import guru.springframework.sfgpetclinic.services.OwnerService;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -29,26 +30,21 @@ import static org.mockito.Mockito.*;
 @ExtendWith(MockitoExtension.class)
 class OwnerControllerTest implements ControllerTests {
 
-//    @Mock
+    @Mock
     OwnerService ownerService;
 
     @Mock
     BindingResult result;
 
-//    @InjectMocks
+    @InjectMocks
     OwnerController controller;
 
     @Captor
     ArgumentCaptor<String> stringArgumentCaptor;
 
-    /**
-     * to capture work for all tests owner service needs to be refreshed for every test
-     */
-    @BeforeEach
-    void setUp(){
-        ownerService = mock(OwnerService.class);
-//        result = mock(BindingResult.class);
-        controller = new OwnerController(ownerService);
+    @AfterEach
+    void after(){
+        this.controller = null;
     }
 
     @Test
